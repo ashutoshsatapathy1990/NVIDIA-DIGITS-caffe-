@@ -1950,6 +1950,14 @@ layer {
     top: "res5a_branch2a"
     name: "res5a_branch2a"
     type: "Convolution"
+    param {
+        lr_mult: 1
+        decay_mult: 1
+    }
+    param {
+        lr_mult: 2
+        decay_mult: 0
+    }
     convolution_param {
         num_output: 512
         kernel_size: 3
