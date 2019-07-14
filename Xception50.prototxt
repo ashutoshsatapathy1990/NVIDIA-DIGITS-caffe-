@@ -1,0 +1,4768 @@
+#Xception50
+name: "Xception50"
+layer {
+  name: "train-data"
+  type: "Data"
+  top: "data"
+  top: "label"
+  transform_param {
+    mirror: true
+    crop_size: 224
+  }
+  data_param {
+    batch_size: 32
+  }
+  include { stage: "train" }
+}
+layer {
+  name: "val-data"
+  type: "Data"
+  top: "data"
+  top: "label"
+  transform_param {
+    mirror: false
+    crop_size: 224
+  }
+  data_param {
+    batch_size: 16
+  }
+  include { stage: "val" }
+}
+layer {
+  name: "conv1"
+  type: "Convolution"
+  bottom: "data"
+  top: "conv1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 64
+    pad: 3
+    kernel_size: 7
+    stride: 2
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_conv1"
+  type: "BatchNorm"
+  bottom: "conv1"
+  top: "bn_conv1"
+  param {
+        lr_mult: 1
+        decay_mult: 0
+  }
+  param {
+        lr_mult: 1
+        decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "conv1_relu"
+  type: "ReLU"
+  bottom: "bn_conv1"
+  top: "bn_conv1"
+}
+layer {
+  name: "pool1"
+  type: "Pooling"
+  bottom: "bn_conv1"
+  top: "pool1"
+  pooling_param {
+  	pool: MAX
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "interstellar2a_branch1_s"
+  type: "Convolution"
+  bottom: "pool1"
+  top: "interstellar2a_branch1_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 64
+    pad: 1
+    kernel_size: 3
+    group: 64
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar2a_branch1"
+  type: "Convolution"
+  bottom: "interstellar2a_branch1_s"
+  top: "interstellar2a_branch1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 256
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar2a_branch1"
+  type: "BatchNorm"
+  bottom: "interstellar2a_branch1"
+  top: "bn_interstellar2a_branch1"
+  param {
+        lr_mult: 1
+        decay_mult: 0
+  }
+  param {
+        lr_mult: 1
+        decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar2a_branch2a_s"
+  type: "Convolution"
+  bottom: "pool1"
+  top: "interstellar2a_branch2a_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 64
+    pad: 1
+    kernel_size: 3
+    group: 64
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar2a_branch2a"
+  type: "Convolution"
+  bottom: "interstellar2a_branch2a_s"
+  top: "interstellar2a_branch2a"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 128
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar2a_branch2a"
+  type: "BatchNorm"
+  bottom: "interstellar2a_branch2a"
+  top: "bn_interstellar2a_branch2a"
+  param {
+        lr_mult: 1
+        decay_mult: 0
+  }
+  param {
+        lr_mult: 1
+        decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar2a_branch2a_relu"
+  type: "ReLU"
+  bottom: "bn_interstellar2a_branch2a"
+  top: "bn_interstellar2a_branch2a"
+}
+layer {
+  name: "interstellar2a_branch2b_s"
+  type: "Convolution"
+  bottom: "bn_interstellar2a_branch2a"
+  top: "interstellar2a_branch2b_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 128
+    pad: 1
+    kernel_size: 3
+    group: 128
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar2a_branch2b"
+  type: "Convolution"
+  bottom: "interstellar2a_branch2b_s"
+  top: "interstellar2a_branch2b"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 128
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar2a_branch2b"
+  type: "BatchNorm"
+  bottom: "interstellar2a_branch2b"
+  top: "bn_interstellar2a_branch2b"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar2a_branch2b_relu"
+  type: "ReLU"
+  bottom: "bn_interstellar2a_branch2b"
+  top: "bn_interstellar2a_branch2b"
+}
+layer {
+  name: "interstellar2a_branch2c_s"
+  type: "Convolution"
+  bottom: "bn_interstellar2a_branch2b"
+  top: "interstellar2a_branch2c_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 128
+    pad: 1
+    kernel_size: 3
+    group: 128
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar2a_branch2c"
+  type: "Convolution"
+  bottom: "interstellar2a_branch2c_s"
+  top: "interstellar2a_branch2c"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 2
+  }
+  convolution_param {
+    num_output: 256
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar2a_branch2c"
+  type: "BatchNorm"
+  bottom: "interstellar2a_branch2c"
+  top: "bn_interstellar2a_branch2c"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar2a"
+  type: "Eltwise"
+  bottom: "bn_interstellar2a_branch2c"
+  bottom: "bn_interstellar2a_branch1"
+  top: "interstellar2a"
+}
+layer {
+  name: "interstellar2a_relu"
+  type: "ReLU"
+  bottom: "interstellar2a"
+  top: "interstellar2a"
+}
+layer {
+  name: "interstellar2b_branch2a_s"
+  type: "Convolution"
+  bottom: "interstellar2a"
+  top: "interstellar2b_branch2a_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    group: 256
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar2b_branch2a"
+  type: "Convolution"
+  bottom: "interstellar2b_branch2a_s"
+  top: "interstellar2b_branch2a"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 128
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar2b_branch2a"
+  type: "BatchNorm"
+  bottom: "interstellar2b_branch2a"
+  top: "bn_interstellar2b_branch2a"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar2b_branch2a_relu"
+  type: "ReLU"
+  bottom: "bn_interstellar2b_branch2a"
+  top: "bn_interstellar2b_branch2a"
+}
+layer {
+  name: "interstellar2b_branch2b_s"
+  type: "Convolution"
+  bottom: "bn_interstellar2b_branch2a"
+  top: "interstellar2b_branch2b_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 128
+    pad: 1
+    kernel_size: 3
+    group: 128
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar2b_branch2b"
+  type: "Convolution"
+  bottom: "interstellar2b_branch2b_s"
+  top: "interstellar2b_branch2b"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 128
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar2b_branch2b"
+  type: "BatchNorm"
+  bottom: "interstellar2b_branch2b"
+  top: "bn_interstellar2b_branch2b"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar2b_branch2b_relu"
+  type: "ReLU"
+  bottom: "bn_interstellar2b_branch2b"
+  top: "bn_interstellar2b_branch2b"
+}
+layer {
+  name: "interstellar2b_branch2c_s"
+  type: "Convolution"
+  bottom: "bn_interstellar2b_branch2b"
+  top: "interstellar2b_branch2c_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 128
+    pad: 1
+    kernel_size: 3
+    group: 128
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar2b_branch2c"
+  type: "Convolution"
+  bottom: "interstellar2b_branch2c_s"
+  top: "interstellar2b_branch2c"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 256
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar2b_branch2c"
+  type: "BatchNorm"
+  bottom: "interstellar2b_branch2c"
+  top: "bn_interstellar2b_branch2c"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar2b"
+  type: "Eltwise"
+  bottom: "bn_interstellar2b_branch2c"
+  bottom: "interstellar2a"
+  top: "interstellar2b"
+}
+layer {
+  name: "interstellar2b_relu"
+  type: "ReLU"
+  bottom: "interstellar2b"
+  top: "interstellar2b"
+}
+layer {
+  name: "interstellar2c_branch2a_s"
+  type: "Convolution"
+  bottom: "interstellar2b"
+  top: "interstellar2c_branch2a_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    group: 256
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar2c_branch2a"
+  type: "Convolution"
+  bottom: "interstellar2c_branch2a_s"
+  top: "interstellar2c_branch2a"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 128
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar2c_branch2a"
+  type: "BatchNorm"
+  bottom: "interstellar2c_branch2a"
+  top: "bn_interstellar2c_branch2a"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar2c_branch2a_relu"
+  type: "ReLU"
+  bottom: "bn_interstellar2c_branch2a"
+  top: "bn_interstellar2c_branch2a"
+}
+layer {
+  name: "interstellar2c_branch2b_s"
+  type: "Convolution"
+  bottom: "bn_interstellar2c_branch2a"
+  top: "interstellar2c_branch2b_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 128
+    pad: 1
+    kernel_size: 3
+    group: 128
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar2c_branch2b"
+  type: "Convolution"
+  bottom: "interstellar2c_branch2b_s"
+  top: "interstellar2c_branch2b"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 128
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar2c_branch2b"
+  type: "BatchNorm"
+  bottom: "interstellar2c_branch2b"
+  top: "bn_interstellar2c_branch2b"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar2c_branch2b_relu"
+  type: "ReLU"
+  bottom: "bn_interstellar2c_branch2b"
+  top: "bn_interstellar2c_branch2b"
+}
+layer {
+  name: "interstellar2c_branch2c_s"
+  type: "Convolution"
+  bottom: "bn_interstellar2c_branch2b"
+  top: "interstellar2c_branch2c_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 128
+    pad: 1
+    kernel_size: 3
+    group: 128
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar2c_branch2c"
+  type: "Convolution"
+  bottom: "interstellar2c_branch2c_s"
+  top: "interstellar2c_branch2c"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 256
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar2c_branch2c"
+  type: "BatchNorm"
+  bottom: "interstellar2c_branch2c"
+  top: "bn_interstellar2c_branch2c"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar2c"
+  type: "Eltwise"
+  bottom: "bn_interstellar2c_branch2c"
+  bottom: "interstellar2b"
+  top: "interstellar2c"
+}
+layer {
+  name: "interstellar2c_relu"
+  type: "ReLU"
+  bottom: "interstellar2c"
+  top: "interstellar2c"
+}
+layer {
+  name: "interstellar3a_branch1_s"
+  type: "Convolution"
+  bottom: "interstellar2c"
+  top: "interstellar3a_branch1_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    group: 256
+    stride: 2
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar3a_branch1"
+  type: "Convolution"
+  bottom: "interstellar3a_branch1_s"
+  top: "interstellar3a_branch1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 512
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar3a_branch1"
+  type: "BatchNorm"
+  bottom: "interstellar3a_branch1"
+  top: "bn_interstellar3a_branch1"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar3a_branch2a_s"
+  type: "Convolution"
+  bottom: "interstellar2c"
+  top: "interstellar3a_branch2a_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    group: 256
+    stride: 2
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+   	bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar3a_branch2a"
+  type: "Convolution"
+  bottom: "interstellar3a_branch2a_s"
+  top: "interstellar3a_branch2a"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 256
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar3a_branch2a"
+  type: "BatchNorm"
+  bottom: "interstellar3a_branch2a"
+  top: "bn_interstellar3a_branch2a"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar3a_branch2a_relu"
+  type: "ReLU"
+  bottom: "bn_interstellar3a_branch2a"
+  top: "bn_interstellar3a_branch2a"
+}
+layer {
+  name: "interstellar3a_branch2b_s"
+  type: "Convolution"
+  bottom: "bn_interstellar3a_branch2a"
+  top: "interstellar3a_branch2b_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    group: 256
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar3a_branch2b"
+  type: "Convolution"
+  bottom: "interstellar3a_branch2b_s"
+  top: "interstellar3a_branch2b"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 256
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar3a_branch2b"
+  type: "BatchNorm"
+  bottom: "interstellar3a_branch2b"
+  top: "bn_interstellar3a_branch2b"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar3a_branch2b_relu"
+  type: "ReLU"
+  bottom: "bn_interstellar3a_branch2b"
+  top: "bn_interstellar3a_branch2b"
+}
+layer {
+  name: "interstellar3a_branch2c_s"
+  type: "Convolution"
+  bottom: "bn_interstellar3a_branch2b"
+  top: "interstellar3a_branch2c_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    group: 256
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar3a_branch2c"
+  type: "Convolution"
+  bottom: "interstellar3a_branch2c_s"
+  top: "interstellar3a_branch2c"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 512
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar3a_branch2c"
+  type: "BatchNorm"
+  bottom: "interstellar3a_branch2c"
+  top: "bn_interstellar3a_branch2c"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar3a"
+  type: "Eltwise"
+  bottom: "bn_interstellar3a_branch2c"
+  bottom: "bn_interstellar3a_branch1"
+  top: "interstellar3a"
+}
+layer {
+  name: "interstellar3a_relu"
+  type: "ReLU"
+  bottom: "interstellar3a"
+  top: "interstellar3a"
+}
+layer {
+  name: "interstellar3b_branch2a_s"
+  type: "Convolution"
+  bottom: "interstellar3a"
+  top: "interstellar3b_branch2a_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 512
+    pad: 1
+    kernel_size: 3
+    group: 512
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar3b_branch2a"
+  type: "Convolution"
+  bottom: "interstellar3b_branch2a_s"
+  top: "interstellar3b_branch2a"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 256
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar3b_branch2a"
+  type: "BatchNorm"
+  bottom: "interstellar3b_branch2a"
+  top: "bn_interstellar3b_branch2a"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar3b_branch2a_relu"
+  type: "ReLU"
+  bottom: "bn_interstellar3b_branch2a"
+  top: "bn_interstellar3b_branch2a"
+}
+layer {
+  name: "interstellar3b_branch2b_s"
+  type: "Convolution"
+  bottom: "bn_interstellar3b_branch2a"
+  top: "interstellar3b_branch2b_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    group: 256
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar3b_branch2b"
+  type: "Convolution"
+  bottom: "interstellar3b_branch2b_s"
+  top: "interstellar3b_branch2b"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 256
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar3b_branch2b"
+  type: "BatchNorm"
+  bottom: "interstellar3b_branch2b"
+  top: "bn_interstellar3b_branch2b"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar3b_branch2b_relu"
+  type: "ReLU"
+  bottom: "bn_interstellar3b_branch2b"
+  top: "bn_interstellar3b_branch2b"
+}
+layer {
+  name: "interstellar3b_branch2c_s"
+  type: "Convolution"
+  bottom: "bn_interstellar3b_branch2b"
+  top: "interstellar3b_branch2c_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    group: 256
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar3b_branch2c"
+  type: "Convolution"
+  bottom: "interstellar3b_branch2c_s"
+  top: "interstellar3b_branch2c"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 512
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar3b_branch2c"
+  type: "BatchNorm"
+  bottom: "interstellar3b_branch2c"
+  top: "bn_interstellar3b_branch2c"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar3b"
+  type: "Eltwise"
+  bottom: "bn_interstellar3b_branch2c"
+  bottom: "interstellar3a"
+  top: "interstellar3b"
+}
+layer {
+  name: "interstellar3b_relu"
+  type: "ReLU"
+  bottom: "interstellar3b"
+  top: "interstellar3b"
+}
+layer {
+  name: "interstellar3c_branch2a_s"
+  type: "Convolution"
+  bottom: "interstellar3b"
+  top: "interstellar3c_branch2a_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 512
+    pad: 1
+    kernel_size: 3
+    group: 512
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar3c_branch2a"
+  type: "Convolution"
+  bottom: "interstellar3c_branch2a_s"
+  top: "interstellar3c_branch2a"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 256
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar3c_branch2a"
+  type: "BatchNorm"
+  bottom: "interstellar3c_branch2a"
+  top: "bn_interstellar3c_branch2a"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar3c_branch2a_relu"
+  type: "ReLU"
+  bottom: "bn_interstellar3c_branch2a"
+  top: "bn_interstellar3c_branch2a"
+}
+layer {
+  name: "interstellar3c_branch2b_s"
+  type: "Convolution"
+  bottom: "bn_interstellar3c_branch2a"
+  top: "interstellar3c_branch2b_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    group: 256
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar3c_branch2b"
+  type: "Convolution"
+  bottom: "interstellar3c_branch2b_s"
+  top: "interstellar3c_branch2b"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 256
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar3c_branch2b"
+  type: "BatchNorm"
+  bottom: "interstellar3c_branch2b"
+  top: "bn_interstellar3c_branch2b"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar3c_branch2b_relu"
+  type: "ReLU"
+  bottom: "bn_interstellar3c_branch2b"
+  top: "bn_interstellar3c_branch2b"
+}
+layer {
+  name: "interstellar3c_branch2c_s"
+  type: "Convolution"
+  bottom: "bn_interstellar3c_branch2b"
+  top: "interstellar3c_branch2c_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    group: 256
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar3c_branch2c"
+  type: "Convolution"
+  bottom: "interstellar3c_branch2c_s"
+  top: "interstellar3c_branch2c"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 512
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar3c_branch2c"
+  type: "BatchNorm"
+  bottom: "interstellar3c_branch2c"
+  top: "bn_interstellar3c_branch2c"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar3c"
+  type: "Eltwise"
+  bottom: "bn_interstellar3c_branch2c"
+  bottom: "interstellar3b"
+  top: "interstellar3c"
+}
+layer {
+  name: "interstellar3c_relu"
+  type: "ReLU"
+  bottom: "interstellar3c"
+  top: "interstellar3c"
+}
+layer {
+  name: "interstellar3d_branch2a_s"
+  type: "Convolution"
+  bottom: "interstellar3c"
+  top: "interstellar3d_branch2a_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 512
+    pad: 1
+    kernel_size: 3
+    group: 512
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar3d_branch2a"
+  type: "Convolution"
+  bottom: "interstellar3d_branch2a_s"
+  top: "interstellar3d_branch2a"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 256
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar3d_branch2a"
+  type: "BatchNorm"
+  bottom: "interstellar3d_branch2a"
+  top: "bn_interstellar3d_branch2a"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar3d_branch2a_relu"
+  type: "ReLU"
+  bottom: "bn_interstellar3d_branch2a"
+  top: "bn_interstellar3d_branch2a"
+}
+layer {
+  name: "interstellar3d_branch2b_s"
+  type: "Convolution"
+  bottom: "bn_interstellar3d_branch2a"
+  top: "interstellar3d_branch2b_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    group: 256
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar3d_branch2b"
+  type: "Convolution"
+  bottom: "interstellar3d_branch2b_s"
+  top: "interstellar3d_branch2b"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 256
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar3d_branch2b"
+  type: "BatchNorm"
+  bottom: "interstellar3d_branch2b"
+  top: "bn_interstellar3d_branch2b"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar3d_branch2b_relu"
+  type: "ReLU"
+  bottom: "bn_interstellar3d_branch2b"
+  top: "bn_interstellar3d_branch2b"
+}
+layer {
+  name: "interstellar3d_branch2c_s"
+  type: "Convolution"
+  bottom: "bn_interstellar3d_branch2b"
+  top: "interstellar3d_branch2c_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    group: 256
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar3d_branch2c"
+  type: "Convolution"
+  bottom: "interstellar3d_branch2c_s"
+  top: "interstellar3d_branch2c"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 512
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar3d_branch2c"
+  type: "BatchNorm"
+  bottom: "interstellar3d_branch2c"
+  top: "bn_interstellar3d_branch2c"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar3d"
+  type: "Eltwise"
+  bottom: "bn_interstellar3d_branch2c"
+  bottom: "interstellar3c"
+  top: "interstellar3d"
+}
+layer {
+  name: "interstellar3d_relu"
+  type: "ReLU"
+  bottom: "interstellar3d"
+  top: "interstellar3d"
+}
+layer {
+  name: "interstellar4a_branch1_s"
+  type: "Convolution"
+  bottom: "interstellar3d"
+  top: "interstellar4a_branch1_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 512
+    pad: 1
+    kernel_size: 3
+    group: 512
+    stride: 2
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar4a_branch1"
+  type: "Convolution"
+  bottom: "interstellar4a_branch1_s"
+  top: "interstellar4a_branch1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 1024
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar4a_branch1"
+  type: "BatchNorm"
+  bottom: "interstellar4a_branch1"
+  top: "bn_interstellar4a_branch1"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar4a_branch2a_s"
+  type: "Convolution"
+  bottom: "interstellar3d"
+  top: "interstellar4a_branch2a_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 512
+    pad: 1
+    kernel_size: 3
+    group: 512
+    stride: 2
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar4a_branch2a"
+  type: "Convolution"
+  bottom: "interstellar4a_branch2a_s"
+  top: "interstellar4a_branch2a"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 512
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar4a_branch2a"
+  type: "BatchNorm"
+  bottom: "interstellar4a_branch2a"
+  top: "bn_interstellar4a_branch2a"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar4a_branch2a_relu"
+  type: "ReLU"
+  bottom: "bn_interstellar4a_branch2a"
+  top: "bn_interstellar4a_branch2a"
+}
+layer {
+  name: "interstellar4a_branch2b_s"
+  type: "Convolution"
+  bottom: "bn_interstellar4a_branch2a"
+  top: "interstellar4a_branch2b_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 512
+    pad: 1
+    kernel_size: 3
+    group: 512
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar4a_branch2b"
+  type: "Convolution"
+  bottom: "interstellar4a_branch2b_s"
+  top: "interstellar4a_branch2b"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 512
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar4a_branch2b"
+  type: "BatchNorm"
+  bottom: "interstellar4a_branch2b"
+  top: "bn_interstellar4a_branch2b"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar4a_branch2b_relu"
+  type: "ReLU"
+  bottom: "bn_interstellar4a_branch2b"
+  top: "bn_interstellar4a_branch2b"
+}
+layer {
+  name: "interstellar4a_branch2c_s"
+  type: "Convolution"
+  bottom: "bn_interstellar4a_branch2b"
+  top: "interstellar4a_branch2c_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 512
+    pad: 1
+    kernel_size: 3
+    group: 512
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar4a_branch2c"
+  type: "Convolution"
+  bottom: "interstellar4a_branch2c_s"
+  top: "interstellar4a_branch2c"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 1024
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar4a_branch2c"
+  type: "BatchNorm"
+  bottom: "interstellar4a_branch2c"
+  top: "bn_interstellar4a_branch2c"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar4a"
+  type: "Eltwise"
+  bottom: "bn_interstellar4a_branch2c"
+  bottom: "bn_interstellar4a_branch1"
+  top: "interstellar4a"
+}
+layer {
+  name: "interstellar4a_relu"
+  type: "ReLU"
+  bottom: "interstellar4a"
+  top: "interstellar4a"
+}
+layer {
+  name: "interstellar4b_branch2a_s"
+  type: "Convolution"
+  bottom: "interstellar4a"
+  top: "interstellar4b_branch2a_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 1024
+    pad: 1
+    kernel_size: 3
+    group: 1024
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar4b_branch2a"
+  type: "Convolution"
+  bottom: "interstellar4b_branch2a_s"
+  top: "interstellar4b_branch2a"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 512
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar4b_branch2a"
+  type: "BatchNorm"
+  bottom: "interstellar4b_branch2a"
+  top: "bn_interstellar4b_branch2a"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar4b_branch2a_relu"
+  type: "ReLU"
+  bottom: "bn_interstellar4b_branch2a"
+  top: "bn_interstellar4b_branch2a"
+}
+layer {
+  name: "interstellar4b_branch2b_s"
+  type: "Convolution"
+  bottom: "bn_interstellar4b_branch2a"
+  top: "interstellar4b_branch2b_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 512
+    pad: 1
+    kernel_size: 3
+    group: 512
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar4b_branch2b"
+  type: "Convolution"
+  bottom: "interstellar4b_branch2b_s"
+  top: "interstellar4b_branch2b"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 512
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar4b_branch2b"
+  type: "BatchNorm"
+  bottom: "interstellar4b_branch2b"
+  top: "bn_interstellar4b_branch2b"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar4b_branch2b_relu"
+  type: "ReLU"
+  bottom: "bn_interstellar4b_branch2b"
+  top: "bn_interstellar4b_branch2b"
+}
+layer {
+  name: "interstellar4b_branch2c_s"
+  type: "Convolution"
+  bottom: "bn_interstellar4b_branch2b"
+  top: "interstellar4b_branch2c_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 512
+    pad: 1
+    kernel_size: 3
+    group: 512
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar4b_branch2c"
+  type: "Convolution"
+  bottom: "interstellar4b_branch2c_s"
+  top: "interstellar4b_branch2c"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 1024
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar4b_branch2c"
+  type: "BatchNorm"
+  bottom: "interstellar4b_branch2c"
+  top: "bn_interstellar4b_branch2c"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar4b"
+  type: "Eltwise"
+  bottom: "bn_interstellar4b_branch2c"
+  bottom: "interstellar4a"
+  top: "interstellar4b"
+}
+layer {
+  name: "interstellar4b_relu"
+  type: "ReLU"
+  bottom: "interstellar4b"
+  top: "interstellar4b"
+}
+layer {
+  name: "interstellar4c_branch2a_s"
+  type: "Convolution"
+  bottom: "interstellar4b"
+  top: "interstellar4c_branch2a_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 1024
+    pad: 1
+    kernel_size: 3
+    group: 1024
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar4c_branch2a"
+  type: "Convolution"
+  bottom: "interstellar4c_branch2a_s"
+  top: "interstellar4c_branch2a"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 512
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar4c_branch2a"
+  type: "BatchNorm"
+  bottom: "interstellar4c_branch2a"
+  top: "bn_interstellar4c_branch2a"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar4c_branch2a_relu"
+  type: "ReLU"
+  bottom: "bn_interstellar4c_branch2a"
+  top: "bn_interstellar4c_branch2a"
+}
+layer {
+  name: "interstellar4c_branch2b_s"
+  type: "Convolution"
+  bottom: "bn_interstellar4c_branch2a"
+  top: "interstellar4c_branch2b_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 512
+    pad: 1
+    kernel_size: 3
+    group: 512
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar4c_branch2b"
+  type: "Convolution"
+  bottom: "interstellar4c_branch2b_s"
+  top: "interstellar4c_branch2b"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 512
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar4c_branch2b"
+  type: "BatchNorm"
+  bottom: "interstellar4c_branch2b"
+  top: "bn_interstellar4c_branch2b"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar4c_branch2b_relu"
+  type: "ReLU"
+  bottom: "bn_interstellar4c_branch2b"
+  top: "bn_interstellar4c_branch2b"
+}
+layer {
+  name: "interstellar4c_branch2c_s"
+  type: "Convolution"
+  bottom: "bn_interstellar4c_branch2b"
+  top: "interstellar4c_branch2c_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 512
+    pad: 1
+    kernel_size: 3
+    group: 512
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar4c_branch2c"
+  type: "Convolution"
+  bottom: "interstellar4c_branch2c_s"
+  top: "interstellar4c_branch2c"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 1024
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar4c_branch2c"
+  type: "BatchNorm"
+  bottom: "interstellar4c_branch2c"
+  top: "bn_interstellar4c_branch2c"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar4c"
+  type: "Eltwise"
+  bottom: "bn_interstellar4c_branch2c"
+  bottom: "interstellar4b"
+  top: "interstellar4c"
+}
+layer {
+  name: "interstellar4c_relu"
+  type: "ReLU"
+  bottom: "interstellar4c"
+  top: "interstellar4c"
+}
+layer {
+  name: "interstellar4d_branch2a_s"
+  type: "Convolution"
+  bottom: "interstellar4c"
+  top: "interstellar4d_branch2a_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 1024
+    pad: 1
+    kernel_size: 3
+    group: 1024
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar4d_branch2a"
+  type: "Convolution"
+  bottom: "interstellar4d_branch2a_s"
+  top: "interstellar4d_branch2a"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 512
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar4d_branch2a"
+  type: "BatchNorm"
+  bottom: "interstellar4d_branch2a"
+  top: "bn_interstellar4d_branch2a"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar4d_branch2a_relu"
+  type: "ReLU"
+  bottom: "bn_interstellar4d_branch2a"
+  top: "bn_interstellar4d_branch2a"
+}
+layer {
+  name: "interstellar4d_branch2b_s"
+  type: "Convolution"
+  bottom: "bn_interstellar4d_branch2a"
+  top: "interstellar4d_branch2b_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 512
+    pad: 1
+    kernel_size: 3
+    group: 512
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+     bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar4d_branch2b"
+  type: "Convolution"
+  bottom: "interstellar4d_branch2b_s"
+  top: "interstellar4d_branch2b"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 512
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar4d_branch2b"
+  type: "BatchNorm"
+  bottom: "interstellar4d_branch2b"
+  top: "bn_interstellar4d_branch2b"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar4d_branch2b_relu"
+  type: "ReLU"
+  bottom: "bn_interstellar4d_branch2b"
+  top: "bn_interstellar4d_branch2b"
+}
+layer {
+  name: "interstellar4d_branch2c_s"
+  type: "Convolution"
+  bottom: "bn_interstellar4d_branch2b"
+  top: "interstellar4d_branch2c_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 512
+    pad: 1
+    kernel_size: 3
+    group: 512
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar4d_branch2c"
+  type: "Convolution"
+  bottom: "interstellar4d_branch2c_s"
+  top: "interstellar4d_branch2c"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 1024
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar4d_branch2c"
+  type: "BatchNorm"
+  bottom: "interstellar4d_branch2c"
+  top: "bn_interstellar4d_branch2c"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar4d"
+  type: "Eltwise"
+  bottom: "bn_interstellar4d_branch2c"
+  bottom: "interstellar4c"
+  top: "interstellar4d"
+}
+layer {
+  name: "interstellar4d_relu"
+  type: "ReLU"
+  bottom: "interstellar4d"
+  top: "interstellar4d"
+}
+layer {
+  name: "interstellar4e_branch2a_s"
+  type: "Convolution"
+  bottom: "interstellar4d"
+  top: "interstellar4e_branch2a_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 1024
+    pad: 1
+    kernel_size: 3
+    group: 1024
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar4e_branch2a"
+  type: "Convolution"
+  bottom: "interstellar4e_branch2a_s"
+  top: "interstellar4e_branch2a"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 512
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar4e_branch2a"
+  type: "BatchNorm"
+  bottom: "interstellar4e_branch2a"
+  top: "bn_interstellar4e_branch2a"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar4e_branch2a_relu"
+  type: "ReLU"
+  bottom: "bn_interstellar4e_branch2a"
+  top: "bn_interstellar4e_branch2a"
+}
+layer {
+  name: "interstellar4e_branch2b_s"
+  type: "Convolution"
+  bottom: "bn_interstellar4e_branch2a"
+  top: "interstellar4e_branch2b_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 512
+    pad: 1
+    kernel_size: 3
+    group: 512
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar4e_branch2b"
+  type: "Convolution"
+  bottom: "interstellar4e_branch2b_s"
+  top: "interstellar4e_branch2b"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 512
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar4e_branch2b"
+  type: "BatchNorm"
+  bottom: "interstellar4e_branch2b"
+  top: "bn_interstellar4e_branch2b"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar4e_branch2b_relu"
+  type: "ReLU"
+  bottom: "bn_interstellar4e_branch2b"
+  top: "bn_interstellar4e_branch2b"
+}
+layer {
+  name: "interstellar4e_branch2c_s"
+  type: "Convolution"
+  bottom: "bn_interstellar4e_branch2b"
+  top: "interstellar4e_branch2c_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 512
+    pad: 1
+    kernel_size: 3
+    group: 512
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar4e_branch2c"
+  type: "Convolution"
+  bottom: "interstellar4e_branch2c_s"
+  top: "interstellar4e_branch2c"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 1024
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar4e_branch2c"
+  type: "BatchNorm"
+  bottom: "interstellar4e_branch2c"
+  top: "bn_interstellar4e_branch2c"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar4e"
+  type: "Eltwise"
+  bottom: "bn_interstellar4e_branch2c"
+  bottom: "interstellar4d"
+  top: "interstellar4e"
+}
+layer {
+  name: "interstellar4e_relu"
+  type: "ReLU"
+  bottom: "interstellar4e"
+  top: "interstellar4e"
+}
+layer {
+  name: "interstellar4f_branch2a_s"
+  type: "Convolution"
+  bottom: "interstellar4e"
+  top: "interstellar4f_branch2a_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 1024
+    pad: 1
+    kernel_size: 3
+    group: 1024
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar4f_branch2a"
+  type: "Convolution"
+  bottom: "interstellar4f_branch2a_s"
+  top: "interstellar4f_branch2a"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 512
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar4f_branch2a"
+  type: "BatchNorm"
+  bottom: "interstellar4f_branch2a"
+  top: "bn_interstellar4f_branch2a"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar4f_branch2a_relu"
+  type: "ReLU"
+  bottom: "bn_interstellar4f_branch2a"
+  top: "bn_interstellar4f_branch2a"
+}
+layer {
+  name: "interstellar4f_branch2b_s"
+  type: "Convolution"
+  bottom: "bn_interstellar4f_branch2a"
+  top: "interstellar4f_branch2b_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 512
+    pad: 1
+    kernel_size: 3
+    group: 512
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar4f_branch2b"
+  type: "Convolution"
+  bottom: "interstellar4f_branch2b_s"
+  top: "interstellar4f_branch2b"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 512
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar4f_branch2b"
+  type: "BatchNorm"
+  bottom: "interstellar4f_branch2b"
+  top: "bn_interstellar4f_branch2b"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar4f_branch2b_relu"
+  type: "ReLU"
+  bottom: "bn_interstellar4f_branch2b"
+  top: "bn_interstellar4f_branch2b"
+}
+layer {
+  name: "interstellar4f_branch2c_s"
+  type: "Convolution"
+  bottom: "bn_interstellar4f_branch2b"
+  top: "interstellar4f_branch2c_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 512
+    pad: 1
+    kernel_size: 3
+    group: 512
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar4f_branch2c"
+  type: "Convolution"
+  bottom: "interstellar4f_branch2c_s"
+  top: "interstellar4f_branch2c"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 1024
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar4f_branch2c"
+  type: "BatchNorm"
+  bottom: "interstellar4f_branch2c"
+  top: "bn_interstellar4f_branch2c"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar4f"
+  type: "Eltwise"
+  bottom: "bn_interstellar4f_branch2c"
+  bottom: "interstellar4e"
+  top: "interstellar4f"
+}
+layer {
+  name: "interstellar4f_relu"
+  type: "ReLU"
+  bottom: "interstellar4f"
+  top: "interstellar4f"
+}
+layer {
+  name: "interstellar5a_branch1_s"
+  type: "Convolution"
+  bottom: "interstellar4f"
+  top: "interstellar5a_branch1_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 1024
+    pad: 1
+    kernel_size: 3
+    group: 1024
+    stride: 2
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar5a_branch1"
+  type: "Convolution"
+  bottom: "interstellar5a_branch1_s"
+  top: "interstellar5a_branch1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 2048
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar5a_branch1"
+  type: "BatchNorm"
+  bottom: "interstellar5a_branch1"
+  top: "bn_interstellar5a_branch1"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar5a_branch2a_s"
+  type: "Convolution"
+  bottom: "interstellar4f"
+  top: "interstellar5a_branch2a_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 1024
+    pad: 1
+    kernel_size: 3
+    group: 1024
+    stride: 2
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar5a_branch2a"
+  type: "Convolution"
+  bottom: "interstellar5a_branch2a_s"
+  top: "interstellar5a_branch2a"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 1024
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar5a_branch2a"
+  type: "BatchNorm"
+  bottom: "interstellar5a_branch2a"
+  top: "bn_interstellar5a_branch2a"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar5a_branch2a_relu"
+  type: "ReLU"
+  bottom: "bn_interstellar5a_branch2a"
+  top: "bn_interstellar5a_branch2a"
+}
+layer {
+  name: "interstellar5a_branch2b_s"
+  type: "Convolution"
+  bottom: "bn_interstellar5a_branch2a"
+  top: "interstellar5a_branch2b_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 1024
+    pad: 1
+    kernel_size: 3
+    group: 1024
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar5a_branch2b"
+  type: "Convolution"
+  bottom: "interstellar5a_branch2b_s"
+  top: "interstellar5a_branch2b"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 1024
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar5a_branch2b"
+  type: "BatchNorm"
+  bottom: "interstellar5a_branch2b"
+  top: "bn_interstellar5a_branch2b"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar5a_branch2b_relu"
+  type: "ReLU"
+  bottom: "bn_interstellar5a_branch2b"
+  top: "bn_interstellar5a_branch2b"
+}
+layer {
+  name: "interstellar5a_branch2c_s"
+  type: "Convolution"
+  bottom: "bn_interstellar5a_branch2b"
+  top: "interstellar5a_branch2c_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 1024
+    pad: 1
+    kernel_size: 3
+    group: 1024
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar5a_branch2c"
+  type: "Convolution"
+  bottom: "interstellar5a_branch2c_s"
+  top: "interstellar5a_branch2c"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 2048
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar5a_branch2c"
+  type: "BatchNorm"
+  bottom: "interstellar5a_branch2c"
+  top: "bn_interstellar5a_branch2c"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar5a"
+  type: "Eltwise"
+  bottom: "bn_interstellar5a_branch2c"
+  bottom: "bn_interstellar5a_branch1"
+  top: "interstellar5a"
+}
+layer {
+  name: "interstellar5a_relu"
+  type: "ReLU"
+  bottom: "interstellar5a"
+  top: "interstellar5a"
+}
+layer {
+  name: "interstellar5b_branch2a_s"
+  type: "Convolution"
+  bottom: "interstellar5a"
+  top: "interstellar5b_branch2a_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 2048
+    pad: 1
+    kernel_size: 3
+    group: 2048
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar5b_branch2a"
+  type: "Convolution"
+  bottom: "interstellar5b_branch2a_s"
+  top: "interstellar5b_branch2a"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 1024
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar5b_branch2a"
+  type: "BatchNorm"
+  bottom: "interstellar5b_branch2a"
+  top: "bn_interstellar5b_branch2a"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar5b_branch2a_relu"
+  type: "ReLU"
+  bottom: "bn_interstellar5b_branch2a"
+  top: "bn_interstellar5b_branch2a"
+}
+layer {
+  name: "interstellar5b_branch2b_s"
+  type: "Convolution"
+  bottom: "bn_interstellar5b_branch2a"
+  top: "interstellar5b_branch2b_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 1024
+    pad: 1
+    kernel_size: 3
+    group: 1024
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar5b_branch2b"
+  type: "Convolution"
+  bottom: "interstellar5b_branch2b_s"
+  top: "interstellar5b_branch2b"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 1024
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar5b_branch2b"
+  type: "BatchNorm"
+  bottom: "interstellar5b_branch2b"
+  top: "bn_interstellar5b_branch2b"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar5b_branch2b_relu"
+  type: "ReLU"
+  bottom: "bn_interstellar5b_branch2b"
+  top: "bn_interstellar5b_branch2b"
+}
+layer {
+  name: "interstellar5b_branch2c_s"
+  type: "Convolution"
+  bottom: "bn_interstellar5b_branch2b"
+  top: "interstellar5b_branch2c_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 1024
+    pad: 1
+    kernel_size: 3
+    group: 1024
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar5b_branch2c"
+  type: "Convolution"
+  bottom: "interstellar5b_branch2c_s"
+  top: "interstellar5b_branch2c"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 2048
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar5b_branch2c"
+  type: "BatchNorm"
+  bottom: "interstellar5b_branch2c"
+  top: "bn_interstellar5b_branch2c"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar5b"
+  type: "Eltwise"
+  bottom: "bn_interstellar5b_branch2c"
+  bottom: "interstellar5a"
+  top: "interstellar5b"
+}
+layer {
+  name: "interstellar5b_relu"
+  type: "ReLU"
+  bottom: "interstellar5b"
+  top: "interstellar5b"
+}
+layer {
+  name: "interstellar5c_branch2a_s"
+  type: "Convolution"
+  bottom: "interstellar5b"
+  top: "interstellar5c_branch2a_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 2048
+    pad: 1
+    kernel_size: 3
+    group: 2048
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar5c_branch2a"
+  type: "Convolution"
+  bottom: "interstellar5c_branch2a_s"
+  top: "interstellar5c_branch2a"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 1024
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar5c_branch2a"
+  type: "BatchNorm"
+  bottom: "interstellar5c_branch2a"
+  top: "bn_interstellar5c_branch2a"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar5c_branch2a_relu"
+  type: "ReLU"
+  bottom: "bn_interstellar5c_branch2a"
+  top: "bn_interstellar5c_branch2a"
+}
+layer {
+  name: "interstellar5c_branch2b_s"
+  type: "Convolution"
+  bottom: "bn_interstellar5c_branch2a"
+  top: "interstellar5c_branch2b_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 1024
+    pad: 1
+    kernel_size: 3
+    group: 1024
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+     bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar5c_branch2b"
+  type: "Convolution"
+  bottom: "interstellar5c_branch2b_s"
+  top: "interstellar5c_branch2b"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 1024
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar5c_branch2b"
+  type: "BatchNorm"
+  bottom: "interstellar5c_branch2b"
+  top: "bn_interstellar5c_branch2b"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar5c_branch2b_relu"
+  type: "ReLU"
+  bottom: "bn_interstellar5c_branch2b"
+  top: "bn_interstellar5c_branch2b"
+}
+layer {
+  name: "interstellar5c_branch2c_s"
+  type: "Convolution"
+  bottom: "bn_interstellar5c_branch2b"
+  top: "interstellar5c_branch2c_s"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 1024
+    pad: 1
+    kernel_size: 3
+    group: 1024
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar5c_branch2c"
+  type: "Convolution"
+  bottom: "interstellar5c_branch2c_s"
+  top: "interstellar5c_branch2c"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 2048
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "bn_interstellar5c_branch2c"
+  type: "BatchNorm"
+  bottom: "interstellar5c_branch2c"
+  top: "bn_interstellar5c_branch2c"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  batch_norm_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "interstellar5c"
+  type: "Eltwise"
+  bottom: "bn_interstellar5c_branch2c"
+  bottom: "interstellar5b"
+  top: "interstellar5c"
+}
+layer {
+  name: "interstellar5c_relu"
+  type: "ReLU"
+  bottom: "interstellar5c"
+  top: "interstellar5c"
+}
+layer {
+  name: "pool5"
+  type: "Pooling"
+  bottom: "interstellar5c"
+  top: "pool5"
+  pooling_param {
+    pool: AVE
+    kernel_size: 7
+  }
+}
+layer {
+  name: "fclayer"
+  type: "InnerProduct"
+  bottom: "pool5"
+  top: "fclayer"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  inner_product_param {
+    weight_filler {
+      type: "msra"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "accuracy"
+  type: "Accuracy"
+  bottom: "fclayer"
+  bottom: "label"
+  top: "accuracy"
+  include { stage: "val" }
+}
+layer {
+  name: "loss"
+  type: "SoftmaxWithLoss"
+  bottom: "fclayer"
+  bottom: "label"
+  top: "loss"
+  exclude { stage: "deploy" }
+}
+layer {
+  name: "softmax"
+  type: "Softmax"
+  bottom: "fclayer"
+  top: "softmax"
+  include { stage: "deploy" }
+}
